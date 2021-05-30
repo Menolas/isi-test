@@ -1,0 +1,16 @@
+.btn {
+	display: block;
+	padding: 16px 22px;
+	text-align: center;
+	color: $white;
+	font-size: 14px;
+	border-radius: 6px;
+	border: none;
+	background-color: $accent;
+	box-sizing: border-box;
+}
+
+.btn--create-user {
+	margin-bottom: 16px;
+	margin-left: auto;
+}

@@ -1,0 +1,10 @@
+**/node_modules/
+npm-debug.*
+Thumbs.db
+build/
+**/vendor/
+/wordpress/
+nginx-wordpress.conf
+package-lock.json
+package.json
+.idea/

@@ -1,0 +1,25 @@
+.entry-content {
+	margin: 0;
+}
+
+
+
+@media (min-width: 1440px) {
+
+	.entry-content__inner-wrap {
+		width: 66.6%;
+	}
+
+    .entry-content {
+    	display: flex;
+    	flex-direction: row;
+    	flex-wrap: nowrap;
+    }
+}
+
+@media (min-width: 1920px) {
+
+	.entry-content__inner-wrap {
+		max-width: 1218px;
+	}
+}

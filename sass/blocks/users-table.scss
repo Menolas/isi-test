@@ -1,0 +1,71 @@
+.users-table {
+	display: flex;
+	flex-direction: column;
+	padding-bottom: 78px;
+	max-width: 1218px;
+	background-color: $white;
+	border-radius: 6px;
+	box-sizing: border-box;
+}
+
+.users-table__list {
+	@include list-style;
+}
+
+.users-table__headers-row,
+.users-table__row {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	padding-left: 26px;
+}
+
+.users-table__headers-row {
+	padding-top: 26px;
+	padding-bottom: 16px;
+}
+
+.users-table__headers-cell span {
+	display: inline-block;
+    color: $header-color;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.users-table__row {
+	margin-bottom: 2px;
+	padding-top: 22px;
+	padding-bottom: 21px;
+	width: 100%;
+	background-color: $light-gray;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+.users-table__headers-cell--username,
+.users-table__cell--username {
+	width: 18.45%;
+}
+
+.users-table__headers-cell--firstname,
+.users-table__cell--firstname {
+	width: 18.87%;
+}
+
+.users-table__headers-cell--lastname,
+.users-table__cell--lastname {
+	width: 18.62%;
+}
+
+.users-table__headers-cell--email,
+.users-table__cell--email {
+	width: 24%;
+}
+
+.users-table__headers-cell--type,
+.users-table__cell--type {
+	width: 20%;
+}
