@@ -1,11 +1,11 @@
 'use strict';
 (function () {
-	const select = document.querySelector('.add-user-form__select');
-	const selectOpen = document.querySelector('.add-user-form__select-input');
-	const selectLabels = document.querySelectorAll('.add-user-form__select .add-user-form__label');
+	const select = document.querySelector('.form__select');
+	const selectOpen = document.querySelector('.form__select-input');
+	const selectLabels = document.querySelectorAll('.form__select .form__label');
 
 	function toggleSelector () {
-		select.classList.toggle('add-user-form__select--opened');
+		select.classList.toggle('form__select--opened');
 	}
     
     if (selectOpen) {
@@ -17,7 +17,7 @@
 		for (let i = 0; i < selectLabels.length; i++) {
 			selectLabels[i].addEventListener('click', (evt) => {
 				selectOpen.textContent = evt.target.textContent;
-				select.classList.remove('add-user-form__select--opened');
+				select.classList.remove('form__select--opened');
 
 			});
 		}

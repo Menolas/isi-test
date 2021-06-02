@@ -206,8 +206,13 @@ $sql = "CREATE TABLE {$table_name} (
 ) {$charset_collate};";
 
 // Создать таблицу.
-dbDelta( $sql );
+dbDelta($sql);
 
+/**
+ * get users from db
+ *
+ * @return array
+ */
 function get_isi_users() {
     global $wpdb;
     $table_name = $wpdb->get_blog_prefix() . 'isi_users';
@@ -218,7 +223,13 @@ function get_isi_users() {
     return $users;
 }
 
-// check for unique username
+/**
+ * check for unique username
+ *
+ * @param string $username - name to compare
+ *
+ * @return boolean
+ */
 
 function find_user_name ($username) {
 	global $wpdb;
@@ -233,6 +244,42 @@ function find_user_name ($username) {
     	return false;
     }
 }
+
+/**
+ * check if certain user's name is still unique for editing form
+ *
+ * @param string $name - name to compare
+ *
+ * @param integer $id - user $id for exclude from results
+ *
+ * @return boolean
+ */
+
+function check_edit_name ($id, $name) {
+	global $wpdb;
+    $table_name = $wpdb->get_blog_prefix() . 'isi_users';
+
+    $sql = $wpdb->prepare("
+    	SELECT * FROM $table_name 
+    	WHERE user_name = %s
+    	AND id != '$id'", $name);
+
+    $name = $wpdb->get_row($sql);
+
+    if ($name) {
+    	return true;
+    } else {
+    	return false;
+    }
+}
+
+/**
+ * check if email is  unique
+ *
+ * @param string $email - email to compare
+ *
+ * @return boolean
+ */
 
 function email_exist ($email) {
 
@@ -249,6 +296,42 @@ function email_exist ($email) {
     }
 }
 
+/**
+ * check if certain user's email is still unique for editing form
+ *
+ * @param string $email - email to compare
+ *
+ * @param integer $id - user's $id to exclude from results
+ * 
+ * @return boolean
+ */
+
+function check_edit_email ($id, $email) {
+	global $wpdb;
+    $table_name = $wpdb->get_blog_prefix() . 'isi_users';
+
+    $sql = $wpdb->prepare("
+    	SELECT * FROM $table_name 
+    	WHERE email = %s
+    	AND id != '$id'", $email);
+
+    $email = $wpdb->get_row($sql);
+
+    if ($email) {
+    	return true;
+    } else {
+    	return false;
+    }
+}
+
+/**
+ * check if password contain at least 1 number and one letter
+ *
+ * @param string $str - password to check
+ * 
+ * @return boolean
+ */
+
 function validate_password ($str) {
 
 	if (preg_match('/[A-zA-я]+/', $str)) 
@@ -259,6 +342,14 @@ function validate_password ($str) {
 	else 
 		return false;
 }
+
+/**
+ * create a new user
+ *
+ * @param array $user - data from filled form
+ * 
+ * @return integer|false
+ */
 
 function upload_user ($user) {
 	global $wpdb;
@@ -273,8 +364,49 @@ function upload_user ($user) {
     ];
 
     $result = $wpdb->insert($table_name, $data);
+    if (!$result) {
+    	echo 'Server Error';
+    }
     return $result;
 }
+
+/**
+ * update a user
+ *
+ * @param array $user_data
+ *
+ * @param integer $id - user's id for updating
+ * 
+ * @return integer|0|false
+ */
+
+function update_edited_user ($user_data, $id) {
+	global $wpdb;
+    $table_name = $wpdb->get_blog_prefix() . 'isi_users';
+
+    $data = [
+    	'user_name' => $user_data['user-name'],
+    	'first_name' => $user_data['first-name'],
+    	'last_name' => $user_data['last-name'],
+    	'email' => $user_data['email'],
+    	'type' => $user_data['type']
+    ];
+
+    if (isset($user_data['password'])) {
+    	$data['password'] = password_hash($user_data['password'], PASSWORD_DEFAULT);
+    }
+
+    $result = $wpdb->update($table_name, $data, ['id' => $id]);
+    return $result;
+}
+
+/**
+ * delete a user
+ *
+ * @param integer $id - user's id for deleting
+ * 
+ * @return integer|0
+ */
 
 function delete_user_by_id ($id) {
 
@@ -282,6 +414,10 @@ function delete_user_by_id ($id) {
     $table_name = $wpdb->get_blog_prefix() . 'isi_users';
     $wpdb->delete($table_name, ['id' => $id]);
 }
+
+/**
+* function for ajax request for deleting user
+*/
 
 add_action('wp_ajax_delete_user', 'delete_user');
 add_action('wp_ajax_nopriv_delete_user', 'delete_user');
@@ -291,6 +427,10 @@ function delete_user () {
 	$id = $_POST['deleteUserId'];
 	delete_user_by_id ($id);
 }
+
+/**
+* function for ajax request get user data
+*/
 
 add_action('wp_ajax_get_user', 'get_user');
 add_action('wp_ajax_nopriv_get_user', 'get_user');
@@ -309,20 +449,103 @@ function get_user () {
     wp_die();
 }
 
-add_action('wp_ajax_edit_user', 'edit_user');
-add_action('wp_ajax_nopriv_edit_user', 'edit_user');
+/**
+* function for ajax request for editing user
+*/
 
-function edit_user {
+add_action('wp_ajax_edit_user_by_data', 'edit_user_by_data');
+add_action('wp_ajax_nopriv_edit_user_by_data', 'edit_user_by_data');
+
+function edit_user_by_data () {
 
 	global $wpdb;
     $table_name = $wpdb->get_blog_prefix() . 'isi_users';
-    $user_id = $_POST['editUserId'];
-    $data = [
-    ];
+    $mydata = array();
+    parse_str($_REQUEST['formData'], $mydata);
 
+    $edit_user_data = [];
+    $errors = [];
+    
+    $edit_user_data['id'] = $mydata['user-id'];
 
+    if (isset($mydata['user-name']) && $mydata['user-name'] !== '') {
+	    if (!check_edit_name ($mydata['user-id'], $mydata['user-name'])) {
+	    	$edit_user_data['user-name'] = $mydata['user-name'];
+	    } else {
+	    	$errors['user-name'] = 'Username must be unique';
+	    }
+	} else {
+		$errors['user-name'] = 'Username field must not be empty';
+	}
+
+    if (isset($mydata['first-name']) && $mydata['first-name'] !== '') {
+    	$edit_user_data['first-name'] = $mydata['first-name'];
+    } else {
+    	$errors['first-name'] = 'First name field must not be empty';
+    }
+
+    if (isset($mydata['last-name']) && $mydata['last-name'] !== '') {
+    	$edit_user_data['last-name'] = $mydata['last-name'];
+    } else {
+    	$errors['last-name'] = 'Last name field must not be empty';
+    }
+
+    if (isset($mydata['email']) && $mydata['email'] !== '') {
+
+    	if (filter_var($mydata['email'], FILTER_VALIDATE_EMAIL)) {
+
+    	    if (!check_edit_email($mydata['user-id'], $mydata['email'])) {
+		    	$edit_user_data['email'] = $mydata['email'];
+		    } else {
+		    	$errors['email'] = 'Email already exist';
+		    }
+		} else {
+			$errors['email'] = 'Email field is not valid';
+		}
+    } else {
+    	$errors['email'] = 'Email name field must not be empty';
+    }
+
+    if (isset($mydata['type']) && trim($mydata['type']) !== '') {
+        $edit_user_data['type'] = $mydata['type'];
+    } else {
+    	$errors['type'] = 'Define your type of user';
+    }
+
+    if (isset($mydata['password']) && trim($mydata['password']) !== '') {
+    	$edit_user_data['password'] = $mydata['password'];
+
+    	if (strlen($edit_user_data['password']) >= 8) {
+
+	    	if (!validate_password($mydata['password'])) {
+	    		$errors['password'] = 'Password min length 8 characters and at least one number and one letter';
+	    	}
+	    } else {
+	    	$errors['password'] = 'Password min length must be at least 8 characters';
+	    }
+    }
+
+    if (isset($mydata['repeat-password']) && trim($mydata['repeat-password']) !== '') {
+
+		$edit_user_data['repeat-password'] = trim($mydata['repeat-password']);
+
+		if ($edit_user_data['repeat-password'] !== $edit_user_data['password']) {
+			$errors['repeat-password'] = 'Passwords are not match';
+		}
+	}
+
+	if (count($errors) === 0) {
+		$result = update_edited_user($edit_user_data, $edit_user_data['id']);
+		$edit_user_data = [];
+		//header("Location: wp-content/themes/isi-test/page-users.php");
+		
+	} else {
+		$edit_user_data = $edit_user_data;
+		include (locate_template('template-parts/content-update-user-error.php'));
+	}
+   
+    wp_die();
 }
 
-
-
+//if( !wp_verify_nonce( $_POST['nonce'], 'myajax-nonce' ) ){ die(); }
 

@@ -1,19 +1,19 @@
-.add-user-form {
+.form {
 	display: none;
 	position: absolute;
-	margin-top: 30px;
 	padding: 31px 26px 26px;
 	width: 584px;
 	background-color: $white;
-	border-radius: 6px;
+	border-radius: $corner;
+	box-shadow: 0px 0px 30px #523F690D;
 	box-sizing: border-box;
 }
 
-.add-user-form.active {
+.form.active {
 	display: block;
 }
 
-.add-user-form__close {
+.form__close {
 	position: absolute;
 	display: block;
 	margin: 0;
@@ -24,9 +24,10 @@
 	height: 24px;
 	border: none;
 	background-color: transparent;
+	cursor: pointer;
 }
 
-.add-user-form__close span {
+.form__close span {
 	position: relative;
 	display: block;
 	width: 20px;
@@ -40,14 +41,14 @@
 	}
 }
 
-.add-user-form__title {
+.form__title {
 	margin-top: 0;
 	margin-bottom: 29px;
 	font-size: 16px;
 	font-weight: 700;
 }
 
-.add-user-form__inner-wrap {
+.form__inner-wrap {
 	margin-bottom: 16px;
 	width: 100%;
 
@@ -56,25 +57,26 @@
 	}
 }
 
-.add-user-form__label {
+.form__label {
 	display: block;
 	margin-bottom: 3px;
 	font-size: 13px;
 }
 
-.add-user-form .add-user-form__input,
-.add-user-form__inner-wrap--type .add-user-form__select-input,
-.add-user-form__inner-wrap--type .add-user-form__select {
+.form .form__input,
+.form__inner-wrap--type .form__select-input,
+.form__inner-wrap--type .form__select {
 	padding: 17px 16px 16px;
     width: 100%;
     height: 46px;
+    font-weight: 300;
     background-color: #F3F6F9;
     border-radius: 6px;
     border: none;
     box-sizing: border-box;
 }
 
-.add-user-form__email-input-wrap {
+.form__email-input-wrap {
 	position: relative;
 
 	&::before {
@@ -88,24 +90,24 @@
 	}
 }
 
-.add-user-form .add-user-form__input--email {
+.form .form__input--email {
 	padding-left: 46px;
 }
 
-.add-user-form .add-user-form__input-error {
+.form .form__input-error {
 	border: 1px solid $error;
 }
 
-.add-user-form__inner-wrap--type .add-user-form__input {
+.form__inner-wrap--type .form__input {
 	display: none;
 }
 
-.add-user-form__inner-wrap--type .add-user-form__select {
+.form__inner-wrap--type .form__select {
 	padding: 0;
 	overflow: hidden;
 }
 
-.add-user-form__inner-wrap--type .add-user-form__select-input {
+.form__inner-wrap--type .form__select-input {
 	position: relative;
 	font-size: 13px;
 	line-height: 1.23;
@@ -113,19 +115,20 @@
 
 	&::before {
 		@include element-style(0, 0, transparent);
-		right: 16px;
+		right: 20px;
 		top: 50%;
         border: 5px solid transparent;
         border-top-color: #a4a4b5;
         border-radius: 3px;
+        transform: translate(0, -3px);
 	}
 }
 
-.add-user-form__inner-wrap--type .add-user-form__select--opened {
+.form__inner-wrap--type .form__select--opened {
 	height: 110px;
 }
 
-.add-user-form__select .add-user-form__label {
+.form__select .form__label {
 	margin-bottom: 10px;
 	padding-left: 16px;
 
@@ -134,22 +137,39 @@
 	}
 }
 
-.add-user-form__btn {
+.form__btn--add {
 	margin: 0 auto;
 	margin-top: 17px;
-	width: 120px;
 }
 
-.add-user-form__error {
+.form__error {
+	margin-top: 3px;
+	margin-bottom: 0;
 	color: $error;
 	font-size: 13px;
 	font-weight: 400; 
 }
 
+.form__inner-wrap--button {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 33px;
+}
+
+.form__btn--delete {
+	background-color: $delete;
+	box-shadow: 0px 5px 8px #F4468229;
+}
+
+.form__btn--update {
+	box-shadow: 0px 5px 8px #2E8FF029;
+}
+
 @media (min-width: 1440px) {
 
-    .add-user-form {
+    .form {
     	position: relative;
+    	width: unset;
     }	
 }
 

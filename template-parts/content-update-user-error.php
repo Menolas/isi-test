@@ -10,7 +10,7 @@
 		<label class="form__label" for="user-name">Username*</label>
 		<input class="form__input  
 		<?=isset($errors['user-name'])? 'form__input-error':'';?>" type="text" name="user-name" id="user-name"
-		value="<?=$update_user->user_name?>">
+		value="<?=isset($edit_user_data['user-name']) ? $edit_user_data['user-name'] : ''?>">
 
 		<?php if (isset($errors['user-name'])) : ?>
 			<p class="form__error"><?=$errors['user-name'];?></p>
@@ -20,7 +20,7 @@
 		<label class="form__label" for="first-name">First name*</label>
 		<input class="form__input
 		<?=isset($errors['first-name'])? 'form__input-error':'';?>" type="text" name="first-name"  id="first-name"
-		value="<?=$update_user->first_name?>">
+		value="<?=isset($edit_user_data['first-name']) ? $edit_user_data['first-name'] : ''?>">
 
 		<?php if (isset($errors['first-name'])) : ?>
 			<p class="form__error"><?=$errors['first-name'];?></p>
@@ -30,7 +30,7 @@
 		<label class="form__label" for="last-name">Last name*</label>
 		<input class="form__input
 		<?=isset($errors['last-name'])? 'form__input-error':'';?>" type="text" name="last-name" id="last-name"
-		value="<?=$update_user->last_name?>">
+		value="<?=isset($edit_user_data['last-name']) ? $edit_user_data['last-name'] : ''?>">
 
 		<?php if (isset($errors['last-name'])) : ?>
 			<p class="form__error"><?=$errors['last-name'];?></p>
@@ -41,7 +41,7 @@
 		<div class="form__email-input-wrap">
 			<input class="form__input form__input--email
 			<?=isset($errors['email'])? 'form__input-error':'';?>" type="text" name="email" id="email"
-			value="<?=$update_user->email?>">
+			value="<?=isset($edit_user_data['email']) ? $edit_user_data['email'] : '' ?>">
 		</div>
 
 		<?php if (isset($errors['email'])) : ?>
@@ -57,7 +57,7 @@
 		<div class="form__select" data-state="">
 			<div class="form__select-input
 			<?=isset($errors['type'])? 'form__input-error':'';?>">
-				<?=$update_user->type?>
+				<?=isset($edit_user_data['type']) ? $edit_user_data['type'] : ''?>
 			</div>
 			<div class="form__select-content">
 				<input class="form__input" id="selectType0" type="radio" value="" name="type" checked>
@@ -79,7 +79,8 @@
 	<div class="form__inner-wrap">
 		<label class="form__label" for="password">Password*</label>
 		<input class="form__input
-		<?=isset($errors['password'])? 'form__input-error':'';?>" type="password" name="password" id="password">
+		<?=isset($errors['password'])? 'form__input-error':'';?>" type="password" name="password" id="password"
+		value="<?=isset($edit_user_data['password']) ? $edit_user_data['password'] : ''?>">
 
 		<?php if (isset($errors['password'])) : ?>
 			<p class="form__error"><?=$errors['password'];?></p>
@@ -88,7 +89,8 @@
 	<div class="form__inner-wrap">
 		<label class="form__label" for="repeat-password">Repeat password*</label>
 		<input class="form__input
-		<?=isset($errors['repeat-password'])? 'form__input-error':'';?>" type="password" name="repeat-password" id="repeat-password">
+		<?=isset($errors['repeat-password'])? 'form__input-error':'';?>" type="password" name="repeat-password" id="repeat-password"
+		value="<?=isset($edit_user_data['repeat-password']) ? $edit_user_data['repeat-password'] : '' ?>">
 
 		<?php if (isset($errors['repeat-password'])) : ?>
 			<p class="form__error"><?=$errors['repeat-password'];?></p>

@@ -1,15 +1,26 @@
 'use strict';
 (function () {
 	const popupButton = document.querySelector('.btn--create-user');
-	const formPopup = document.querySelector('.add-user-form');
-	const popupCloseButton = document.querySelector('.add-user-form__close');
+	const formPopup = document.querySelector('#add-user');
+	const popupCloseButton = document.querySelector('#add-user-form-close');
+	const successMessage = document.querySelector('.users-page__message');
+	const submitButton = formPopup.querySelector('.form__btn--add');
+
+	function hideSuccessMessage () {
+		if (successMessage && successMessage.classList.contains('users-page__message--success')) {
+			successMessage.classList.remove('users-page__message--success');
+			successMessage.textContent = '';
+		}
+	}
 
 	function closePopup () {
 		formPopup.classList.remove('active');
+		hideSuccessMessage();
 	}
 
 	function showPopup () {
 		formPopup.classList.add('active');
+		hideSuccessMessage();
 	}
 
 	if (popupButton) {
@@ -23,6 +34,10 @@
 				}
 			});
 		});
+	}
+
+	if (successMessage) {
+		setTimeout(hideSuccessMessage, 3000);
 	}
 
 })();

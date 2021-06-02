@@ -1,23 +1,15 @@
 <?php
 /**
- * The template for displaying all pages
- *
- *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
+ * The template for displaying Users page
  *
  * @package isi-test
  */
 
-global $update_user;
-print_r($update_user);
-
-if (isset($_POST['delete-user'])) {
-		//delete_user_by_id($update_user->id);
-	}
-
 $active = '';
+$message_kind = '';
+$message = '';
 
-if (isset($_POST['add-user'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add-user'])) {
 	
 	$errors = [];
 	$values = [];
@@ -118,14 +110,19 @@ if (isset($_POST['add-user'])) {
 		$result = upload_user($values);
 		if ($result) {
 			$values = [];
-			$active = '';
+			$message_kind = 'success';
+			$message = 'User successfully added';
 		} else {
 			$active = 'active';
 			$values = $values;
+			$message_kind = 'error';
+			$message = 'Server error happened - try one more time';
 		}
 	} else {
 		$active = 'active';
 		$values = $values;
+		$message_kind = 'error';
+		$message = 'Edit invalid fields';
 	}
 }
 
@@ -137,8 +134,9 @@ get_header('users');
 
  <main id="primary" class="site-main  users-page">
 	<div class="container">
-	
+	    
 	    <div class="entry-content">
+	    	<div class="users-page__message  users-page__message--<?=$message_kind?>"><?=$message?></div>
     
 		    <div class="entry-content__inner-wrap">
 
@@ -196,103 +194,104 @@ get_header('users');
 
 			<!--.add-user-form-->
             <div class="users-page__form-container">
-			<form  id="add-user" class="add-user-form <?=$active;?>"
-			    method="POST">
-			    <button class="add-user-form__close">
-			    	<span></span>
-			    </button>
-				<h3 class="add-user-form__title">Create new user</h3>
+            	<div class="form-container--edit-user"></div>
+				<form  id="add-user" class="form form--add-user <?=$active;?>"
+				    method="POST">
+				    <button id="add-user-form-close" class="form__close">
+				    	<span></span>
+				    </button>
+					<h3 class="form__title">Create new user</h3>
 
-				<div class="add-user-form__inner-wrap">
-					<label class="add-user-form__label" for="user-name">Username*</label>
-					<input class="add-user-form__input
-					<?=isset($errors['user-name'])? 'add-user-form__input-error': ''?>" type="text" name="user-name" id="user-name"
-						value="<?=isset($values['user-name']) ? $values['user-name'] : ''?>">
-					<?php if (isset($errors['user-name'])) : ?>
-						<p class="add-user-form__error"><?=$errors['user-name'];?></p>
-					<?php endif; ?>
-				</div>
-				<div class="add-user-form__inner-wrap">
-					<label class="add-user-form__label" for="first-name">First name*</label>
-					<input class="add-user-form__input
-					<?=isset($errors['first-name'])? 'add-user-form__input-error': ''?>" type="text" name="first-name"  id="first-name"
-					value="<?=isset($values['first-name']) ? $values['first-name'] : ''?>">
+					<div class="form__inner-wrap">
+						<label class="form__label" for="user-name">Username*</label>
+						<input class="form__input
+						<?=isset($errors['user-name'])? 'form__input-error': ''?>" type="text" name="user-name" id="user-name"
+							value="<?=isset($values['user-name']) ? $values['user-name'] : ''?>">
+						<?php if (isset($errors['user-name'])) : ?>
+							<p class="form__error"><?=$errors['user-name'];?></p>
+						<?php endif; ?>
+					</div>
+					<div class="form__inner-wrap">
+						<label class="form__label" for="first-name">First name*</label>
+						<input class="form__input
+						<?=isset($errors['first-name'])? 'form__input-error': ''?>" type="text" name="first-name"  id="first-name"
+						value="<?=isset($values['first-name']) ? $values['first-name'] : ''?>">
 
-					<?php if (isset($errors['first-name'])) : ?>
-						<p class="add-user-form__error"><?=$errors['first-name'];?></p>
-					<?php endif; ?>
-				</div>
-				<div class="add-user-form__inner-wrap">
-					<label class="add-user-form__label" for="last-name">Last name*</label>
-					<input class="add-user-form__input
-					<?=isset($errors['last-name'])? 'add-user-form__input-error' : ''?>" type="text" name="last-name" id="last-name"
-					value="<?=isset($values['last-name']) ? $values['last-name'] : ''?>">
+						<?php if (isset($errors['first-name'])) : ?>
+							<p class="form__error"><?=$errors['first-name'];?></p>
+						<?php endif; ?>
+					</div>
+					<div class="form__inner-wrap">
+						<label class="form__label" for="last-name">Last name*</label>
+						<input class="form__input
+						<?=isset($errors['last-name'])? 'form__input-error' : ''?>" type="text" name="last-name" id="last-name"
+						value="<?=isset($values['last-name']) ? $values['last-name'] : ''?>">
 
-					<?php if (isset($errors['last-name'])) : ?>
-						<p class="add-user-form__error"><?=$errors['last-name'];?></p>
-					<?php endif; ?>
-				</div>
-				<div class="add-user-form__inner-wrap">
-					<label class="add-user-form__label" for="email">Email*</label>
-					<div class="add-user-form__email-input-wrap">
-						<input class="add-user-form__input  add-user-form__input--email
-						<?=isset($errors['email'])? 'add-user-form__input-error' : ''?>" type="text" name="email" id="email"
-						value="<?=isset($values['email']) ? $values['email'] : ''?>">
+						<?php if (isset($errors['last-name'])) : ?>
+							<p class="form__error"><?=$errors['last-name'];?></p>
+						<?php endif; ?>
+					</div>
+					<div class="form__inner-wrap">
+						<label class="form__label" for="email">Email*</label>
+						<div class="form__email-input-wrap">
+							<input class="form__input  form__input--email
+							<?=isset($errors['email'])? 'form__input-error' : ''?>" type="text" name="email" id="email"
+							value="<?=isset($values['email']) ? $values['email'] : ''?>">
+						</div>
+
+						<?php if (isset($errors['email'])) : ?>
+							<p class="form__error"><?=$errors['email'];?></p>
+						<?php endif; ?>
 					</div>
 
-					<?php if (isset($errors['email'])) : ?>
-						<p class="add-user-form__error"><?=$errors['email'];?></p>
-					<?php endif; ?>
-				</div>
+					<!--select-->
 
-				<!--select-->
+					<div class="form__inner-wrap  form__inner-wrap--type">
+						<span class="form__label">Type*</span>
 
-				<div class="add-user-form__inner-wrap  add-user-form__inner-wrap--type">
-					<span class="add-user-form__label">Type*</span>
-
-					<div class="add-user-form__select" data-state="">
-						<div class="add-user-form__select-input
-						<?=isset($errors['type'])? 'add-user-form__input-error':''?>">
-							
+						<div class="form__select" data-state="">
+							<div class="form__select-input
+							<?=isset($errors['type'])? 'form__input-error':''?>">
+								
+							</div>
+							<div class="form__select-content">
+								<input class="form__input" id="selectType0" type="radio" value="" name="type" checked>
+							    
+							    <input class="form__input" id="selectType1" type="radio" value="Administrator" name="type">
+							    <label class="form__label" for="selectType1">Administrator</label>
+							    <input class="form__input" id="selectType2" type="radio" value="Driver" name="type">
+							    <label class="form__label" for="selectType2">Driver</label>
+							</div>
 						</div>
-						<div class="add-user-form__select-content">
-							<input class="add-user-form__input" id="selectType0" type="radio" value="" name="type" checked>
-						    
-						    <input class="add-user-form__input" id="selectType1" type="radio" value="Administrator" name="type">
-						    <label class="add-user-form__label" for="selectType1">Administrator</label>
-						    <input class="add-user-form__input" id="selectType2" type="radio" value="Driver" name="type">
-						    <label class="add-user-form__label" for="selectType2">Driver</label>
-						</div>
+
+						<?php if (isset($errors['type'])) : ?>
+							<p class="form__error"><?=$errors['type'];?></p>
+						<?php endif; ?>
+					</div> <!--select-->
+
+					<div class="form__inner-wrap">
+						<label class="form__label" for="password">Password*</label>
+						<input class="form__input
+						<?=isset($errors['password'])? 'form__input-error':'';?>" type="password" name="password" id="password"
+						value="<?=isset($values['password']) ? $values['password'] : '' ?>">
+
+						<?php if (isset($errors['password'])) : ?>
+							<p class="form__error"><?=$errors['password'];?></p>
+						<?php endif; ?>
 					</div>
+					<div class="form__inner-wrap">
+						<label class="form__label" for="repeat-password">Repeat password*</label>
+						<input class="form__input
+						<?=isset($errors['repeat-password'])? 'form__input-error':'';?>" type="password" name="repeat-password" id="repeat-password"
+						value="<?=isset($values['repeat-password']) ? $values['repeat-password'] : '' ?>">
 
-					<?php if (isset($errors['type'])) : ?>
-						<p class="add-user-form__error"><?=$errors['type'];?></p>
-					<?php endif; ?>
-				</div> <!--select-->
+						<?php if (isset($errors['repeat-password'])) : ?>
+							<p class="form__error"><?=$errors['repeat-password'];?></p>
+						<?php endif; ?>
+					</div>
+				    <button class="btn  form__btn  form__btn--add" type="submit" name="add-user">Create</button>
 
-				<div class="add-user-form__inner-wrap">
-					<label class="add-user-form__label" for="password">Password*</label>
-					<input class="add-user-form__input
-					<?=isset($errors['password'])? 'add-user-form__input-error':'';?>" type="password" name="password" id="password"
-					value="<?=isset($values['password']) ? $values['password'] : '' ?>">
-
-					<?php if (isset($errors['password'])) : ?>
-						<p class="add-user-form__error"><?=$errors['password'];?></p>
-					<?php endif; ?>
-				</div>
-				<div class="add-user-form__inner-wrap">
-					<label class="add-user-form__label" for="repeat-password">Repeat password*</label>
-					<input class="add-user-form__input
-					<?=isset($errors['repeat-password'])? 'add-user-form__input-error':'';?>" type="password" name="repeat-password" id="repeat-password"
-					value="<?=isset($values['repeat-password']) ? $values['repeat-password'] : '' ?>">
-
-					<?php if (isset($errors['repeat-password'])) : ?>
-						<p class="add-user-form__error"><?=$errors['repeat-password'];?></p>
-					<?php endif; ?>
-				</div>
-			    <button class="btn  btn--create  add-user-form__btn" type="submit" name="add-user">Create</button>
-
-			</form>
+				</form>
 		    </div>
 	
 		</div><!-- .entry-content -->
@@ -303,4 +302,4 @@ get_header('users');
 
 <?php
 
-get_footer();
+get_footer('users');

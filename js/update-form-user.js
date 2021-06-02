@@ -1,6 +1,12 @@
 jQuery(document).ready(function ($) {
 
 	$('.users-table__row').click(function (e) {
+		$('.users-table__row').each(function(i, elem) {
+			if ($(this).hasClass('users-table__row--clicked')) {
+				$(this).removeClass('users-table__row--clicked');
+			}
+		});
+		$(this).addClass('users-table__row--clicked');
 		var userId = $(this).attr('data-id');
 
 		ajaxUserUpload(userId);
@@ -14,10 +20,18 @@ jQuery(document).ready(function ($) {
 				userid: userId
 			},
 			function (response) {
-				$('#add-user').remove();
-				$('.users-page__form-container').html(response);
+				if ($('#add-user').hasClass('active')) {
+					$('#add-user').removeClass('active');
+				}
+				$('.form-container--edit-user').html(response);
 
-				$('.delete-user-form__btn').click(function (e) {
+				$('#edit-user-form-close').click(function () {
+
+					$('#edit-user').css("display", "none");
+
+				});
+
+				$('#delete').click(function (e) {
 					
 					var deleteUserId = $(this).attr('data');
 
@@ -30,23 +44,29 @@ jQuery(document).ready(function ($) {
 					);
 				});
 
-				$(".update-user-form__btn").click(function (e) {
-					//e.preventDefault();
+				$("#edit-user").submit(function(e) {
+					e.preventDefault();
+					
+					var editForm = $(this);
 
-					var editUserId = $(this).attr('data');
+					    jQuery.post(
+					    	myPlugin.ajaxurl,
+					        {
+					        	action: 'edit_user_by_data',
+					            formData: editForm.serialize(),
+					        },
+					        function (response) {
+					        	
+					        	$('.form-container--edit-user').html(response);
+					        	$('#edit-user-form-close').click(function () {
 
-					jQuery.post(
-						myPlugin.ajaxurl,
-						{
-							action: 'edit_user',
-							editUserId: editUserId
-						}
-					);
+									$('#edit-user').css("display", "none");
 
+								});
+					        }
+					    );
 				});
-
 			}
 		);
 	}
-
 });
