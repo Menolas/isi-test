@@ -10,7 +10,7 @@ the custom WordPress theme is created "isi-test"
 == Installation ==
 
 1. clone this repo to the someWPproject/wp-content/themes on your computer
-2. from admin dashboard in this project create a page "Users", link mas look like someWPproject/users
+2. from admin dashboard in this project create a page "Users", link must look like someWPproject/users
 4. in file schema.sql the table wich has to be created in bd, also you can create users with sql requests which are in queries.sql file
 5. now you can see the page i've created in this repo by heating someWPproject/users in the address line
 
