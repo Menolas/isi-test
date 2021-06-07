@@ -2,20 +2,18 @@
 
 ## Description
 
-this is a testing task for position full-stack developer 
+this is a testing task for position full-stack developer
+the custom WordPress theme is created "isi-test"
 
-Requires PHP: 5.6
-Stable tag: 1.0.0
-License: GNU General Public License v2 or later
-License URI: LICENSE
-
-A starter theme called isi-test.
+* Requires PHP: 5.6
 
 == Installation ==
 
-1. In your admin panel, go to Appearance > Themes and click the Add New button.
-2. Click Upload Theme and Choose File, then select the theme's .zip file. Click Install Now.
-3. Click Activate to use your new theme right away.
+1. clone this repo to the someWPproject/wp-content/themes on your computer
+2. from admin dashboard in this project create a page "Users", link mas look like someWPproject/users
+4. in file schema.sql the table wich has to be created in bd, also you can create users with sql requests which are in queries.sql file
+5. now you can se the page on the someWPproject/users 
+
 
 == Frequently Asked Questions ==
 
